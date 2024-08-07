@@ -18,13 +18,10 @@ echo -e "\e[1;32m
 }
 banner
 echo ""
-# Defina a URL da API
 URL="https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=$1&keywordExactMatch"
 
-# Faça a requisição HTTP e armazene o resultado em uma variável
 response=$(curl -s "$URL")
 
-# Verifique se a requisição foi bem-sucedida
 if [ $? -ne 0 ]; then
   echo "Erro ao fazer a requisição HTTP."
   exit 1
