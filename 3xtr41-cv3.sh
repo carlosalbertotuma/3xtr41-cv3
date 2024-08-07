@@ -14,12 +14,12 @@ echo -e "\e[1;32m
   / \ / \   / \ / \ / \ / \ / \ / \ / \ / \   / \   / \ / \ / \ / \ / \  
  ( B | y ) ( B | l | 4 | d | s | c | 4 | n ) ( - ) ( V | . | 0 | . | 1 ) 
   \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/   \_/   \_/ \_/ \_/ \_/ \_/  \e[0m"
-
 }
+
 banner
 echo ""
-URL="https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=$1&keywordExactMatch"
 
+URL="https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=$1&keywordExactMatch"
 response=$(curl -s "$URL")
 
 if [ $? -ne 0 ]; then
@@ -33,5 +33,7 @@ if ! command -v jq &> /dev/null; then
   exit 1
 fi
 
-# Processar o JSON retornado para extrair os CVEs
-echo "$response" | jq -r '.vulnerabilities[].cve | "\(.id): \(.descriptions[0].value)"'
+# Processar o JSON retornado para extrair os CVEs, inverter a ordem (do mais novo ára o mais antigo) e adicionar quebra de linha
+echo "$response" | jq -r '.vulnerabilities[].cve | "\(.id): \(.descriptions[0].value)"' | sort -r | while read -r line; do
+  echo -e "$line\n"
+done
